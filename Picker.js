@@ -28,7 +28,7 @@ class Picker extends Component {
     this.state = {};
   }
 
-  onPressPicker(values, labels) {
+  onPressPicker = (values, labels) => () => {
     NativeModules.FixedAndroidPicker.showPickerDialog(labels).then((index) => {
       this.setState({
         selectedValue: values[index],
@@ -37,6 +37,10 @@ class Picker extends Component {
     }).catch((error) => {
       //dialog closed
     });
+  }
+
+  getTheme = () => {
+    return this.props.theme;
   }
 
   render() {
@@ -53,12 +57,10 @@ class Picker extends Component {
         <TouchableNativeFeedback
           underlayColor={this.getTheme() == THEMES.LIGHT ? '#FFFFFF' : '#000000'}
           style={styles.padding5}
-          onPress={() => {
-            this.onPressPicker(values, labels);
-          }}>
+          onPress={this.onPressPicker(values, labels)}>
 
             {
-              renderDropDown(labels, values)
+              this.renderDropDown(labels, values)
             }
 
         </TouchableNativeFeedback>
@@ -66,11 +68,7 @@ class Picker extends Component {
     );
   }
 
-  getTheme() {
-    return this.props.theme;
-  }
-
-  renderDropDown(labels, values) {
+  renderDropDown = (labels, values) => {
     return (
       <View
         style={[
@@ -99,7 +97,7 @@ class Picker extends Component {
     );
   }
 
-  getDropDownSource() {
+  getDropDownSource = () => {
     let dropDownImageSource;
     if (this.props.dropDownImageSource) {
       dropDownImageSource = this.props.dropDownImageSource;
@@ -111,13 +109,13 @@ class Picker extends Component {
     return dropDownImageSource;
   }
 
-  getLabels(items) {
+  getLabels = (items) => {
     return items.map((item) => {
       return item.label;
     });
   }
 
-  getValues(items) {
+  getValues = (items) => {
     return items.map((item) => {
       return item.value;
     });
@@ -154,4 +152,4 @@ Picker.defaultProps = {
 export {
   THEMES as Themes,
 };
-export default Picker;
+export default Picker
